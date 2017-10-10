@@ -1853,6 +1853,15 @@ public class GsmServiceStateTracker extends ServiceStateTracker {
     private void setNotification(int notifyType) {
 
         if (DBG) log("setNotification: create notification " + notifyType);
+        
+        // Needed because sprout RIL sends these when they shouldn't?
+        boolean isSetNotification = mPhone.getContext().getResources().getBoolean(
+                com.android.internal.R.bool.config_user_notification_of_restrictied_mobile_access);
+        if (!isSetNotification) {
+            if (DBG) log("Ignore all the notifications");
+            return;
+        }
+        
         Context context = mPhone.getContext();
 
         mNotification = new Notification();
